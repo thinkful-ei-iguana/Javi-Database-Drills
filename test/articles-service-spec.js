@@ -32,126 +32,45 @@ describe(`Articles service object`, function(){
 
     before(() => {
         db = knex({
-            client: 'pg',
-            connection: process.env.TEST_DB_URL,
+          client: 'pg',
+          connection: process.env.TEST_DB_URL,
         })
-    })
-
-
-    before(() => db('blogful_articles').truncate())
-
-    afterEach(() => db('blogful_articles').truncate())
-
-    after(() => db.destroy())
-
-    before(() => {
-        return db
-            .into('blogful_articles')
-            .insert(testArticles)
-    })
-
-    // CONTEXT synonym for DESCRIBE
-    context(`Given 'blogful_articles' has data`, () => {
-        before(() => {
+      })
+    
+      before(() => db('blogful_articles').truncate())
+    
+      afterEach(() => db('blogful_articles').truncate())
+    
+      after(() => db.destroy())
+    
+      context(`Given 'blogful_articles' has data`, () => {
+        beforeEach(() => {
           return db
             .into('blogful_articles')
             .insert(testArticles)
         })
-    })
     
         it(`getAllArticles() resolves all articles from 'blogful_articles' table`, () => {
-            return ArticlesService.getAllArticles(db)
+          return ArticlesService.getAllArticles(db)
             .then(actual => {
               expect(actual).to.eql(testArticles)
             })
+        })
     
+        it(`getById() resolves an article by id from 'blogful_articles' table`, () => {
+          const thirdId = 3
+          const thirdTestArticle = testArticles[thirdId - 1]
+          return ArticlesService.getById(db, thirdId)
+            .then(actual => {
+              expect(actual).to.eql({
+                id: thirdId,
+                title: thirdTestArticle.title,
+                content: thirdTestArticle.content,
+                date_published: thirdTestArticle.date_published,
+              })
+            })
         })
-
-        context(`Given 'blogful_articles' has no data`, () => {
-               it(`getAllArticles() resolves an empty array`, () => {
-                 return ArticlesService.getAllArticles(db)
-                   .then(actual => {
-                     expect(actual).to.eql([])
-                   })
-               })
-             })
-
-             it(`insertArticle() inserts a new article and resolves the new article with an 'id'`, () => {
-                const newArticle = {
-                    title: 'Test new title',
-                    content: 'Test new content',
-                    date_published: new Date('2020-01-01T00:00:00.000Z'),
-                  }
-                  return ArticlesService.insertArticle(db, newArticle)
-                  .then(actual => {
-                      expect(actual).to.eql({
-                        id: 1,
-                        title: newArticle.title,
-                        content: newArticle.content,
-                        date_published: newArticle.date_published,
-                      })
-                    })
-               })
   
-
-
-    describe.skip(`Temporary spec - top level describe`, () => {
-        before(() => {
-          console.log('before #1')
-        })
-      
-        after(() => {
-          console.log('after #1')
-        })
-      
-        beforeEach(() => {
-          console.log('beforeEach #2')
-        })
-      
-        before(() => {
-          console.log('before #2')
-        })
-      
-        describe(`Describe #1`, () => {
-          before(() => {
-            console.log('before #3')
-          })
-      
-          after(() => {
-            console.log('after #2')
-          })
-      
-          afterEach(() => {
-            console.log('afterEach #1')
-          })
-      
-          it(`it #1`, () => {
-            console.log('it #1')
-          })
-      
-          it(`it #2`, () => {
-            console.log('it #2')
-          })
-      
-          describe(`Describe #2`, () => {
-            it(`it #3`, () => {
-              console.log('it #3')
-            })
-      
-            before(() => {
-              console.log('before #4')
-            })
-          })
-        })
-      
-        it(`it #4`, () => {
-          console.log('it #4')
-        })
-      
-        it(`it #5`, () => {
-          console.log('it #5')
-        })
-      })
 })
 
-
+})
