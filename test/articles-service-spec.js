@@ -31,7 +31,9 @@ describe(`Articles service object`, function(){
         })
     })
 
+    after(() => db.destroy())
 
+    before(() => db('blogful_articles').truncate())
 
     before(() => {
         return db
@@ -39,7 +41,6 @@ describe(`Articles service object`, function(){
             .insert(testArticles)
     })
 
-    after(() => db.destroy())
 
     describe(`getAllArticles()`, () => {
         it(`resolves all articles from 'blogful_articles' table`, () => {
