@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "start": "node src/blogful.js",
-    "dev": "nodemon src/blogful.js",
+    "start": "node src/shopping-list-service.js",
+    "dev": "nodemon src/shopping-list-service.js",
     "test": "mocha --require test/setup.js",
     "predeploy": "npm audit",
     "deploy": "git push heroku master"
