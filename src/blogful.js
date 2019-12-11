@@ -7,4 +7,4 @@ const knexInstance = knex({
   connection: process.env.DB_URL,
 })
 ArticlesService.getAllArticles(knexInstance)
-    .then(articles => console.log(articles))
+    .then(articles => console.log('articles',articles))
